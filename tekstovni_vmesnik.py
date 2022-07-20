@@ -20,7 +20,7 @@ def igra():
     print("==============================================\n")
     print('Dobrodošli v igri Besedle!')
     skrivnost = random.choice(seznam_besed)
-    besedle = Besedle(skrivnost)
+    besedle = Besedle('KRČMA')
 
     while besedle.lahko_poskusi():
         vnos = input('\nUgib: ')

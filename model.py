@@ -73,7 +73,13 @@ class Besedle:
                     seznam_geslo.remove(self.poskusi[j][i])
         if len(seznam_geslo) != 0:
             return random.choice(seznam_geslo)
-        
+        elif len(seznam_geslo) == 0:
+            print('Imaš že vse črke!')
     
-
+# bug 1: če imam vse črke, namig vrne None
+'''
+petka, kamen, blišč, račka,
+krčma
+'''
+# bug 2: če pri namigu ne vneseš da/ne je isto kot ne 
             
