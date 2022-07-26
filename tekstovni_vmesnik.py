@@ -1,8 +1,7 @@
 from model import Stanje_crk
-from model import Besedle
 from model import Barve
 from typing import List
-import random
+from model import nova_igra
 
 
 PONOVNI_ZAGON = 'p'
@@ -17,11 +16,9 @@ with open('besede.txt', 'r') as f:
 
 
 def igra():
-    print("==============================================\n")
-    print('Dobrodošli v igri Besedle!')
-    skrivnost = random.choice(seznam_besed)
-    besedle = Besedle('KRČMA')
-
+    print('\nDobrodošli v igri Besedle!')
+    besedle = nova_igra()
+  
     while besedle.lahko_poskusi():
         vnos = input('\nUgib: ')
         if len(vnos) != besedle.DOLZINA_BESEDE:
@@ -47,7 +44,7 @@ def igra():
         izberi_ponovitev()
     else:
         print('\nNi ti uspelo!')
-        print(f'Beseda je bila: {skrivnost}')
+        print(f'Beseda je bila: {besedle.geslo}')
         izberi_ponovitev()
 
 
@@ -110,7 +107,6 @@ def namig(besedle):
     izbira = zahtevaj_namig().strip().lower()
     if izbira == NAMIG:
         print(f'v besedi je črka: {besedle.izberi_namig()}')
-    else:
-        NE_NAMIG
+
 
 igra()
