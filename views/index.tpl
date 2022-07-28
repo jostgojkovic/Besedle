@@ -1,13 +1,19 @@
-% rebase('base.tpl', title='Vislice')
+<!DOCTYPE html>
+<html>
 
-  <h1>Vislice</h1>
+<body>
+
+  <h1>Besedle</h1>
 
   <blockquote>
-    Vislice so najboljša igra za preganjanje dolgčasa (poleg tetrisa).
-    <small>Študentje</small>
+      bla bla bla
   </blockquote>
 
+  <img src="/img/1.png" alt="kokoš v obleki" style="width:200px;height:300px;"">
 
-  <form action="/nova_igra/" method="post">
+  <form action="/igra/" method="post">
     <button type="submit">Nova igra</button>
   </form>
+</body>
+
+</html>

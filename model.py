@@ -1,6 +1,6 @@
 import json
 import random
-
+from typing import List
 
 # bug 1: če imam vse črke, namig vrne None
 '''
@@ -12,6 +12,9 @@ krčma
 DATOTEKA_Z_BESEDAMI = 'besede.txt'
 DATOTEKA_S_STANJEM = 'stanje.json'
 
+ZACETEK = 'S'
+ZMAGA = 'W'
+PORAZ = 'X'
 
 class Barve:
     ZELENA = '\033[92m'
@@ -85,37 +88,41 @@ class Besedle:
             return random.choice(seznam_geslo)
         elif len(seznam_geslo) == 0:
             print('Imaš že vse črke!')
+
+##############################
+
+    def izpisi_rezultat(self):
+        for beseda in self.poskusi:
+            rezultat = self.ugibaj(beseda)
+            pobarvan_rez = self.dodaj_barve(rezultat)
+            return pobarvan_rez
     
+        for _ in range(self.preostali_poskusi()):
+            return ' '.join(['_'] * self.DOLZINA_BESEDE)
+
+    def dodaj_barve(rez: List[Stanje_crk]):
+        rez_z_barvo = []
+        for crka in rez:
+            if crka.v_poziciji:
+                barva = Barve.ZELENA
+            elif crka.v_besedi:
+                barva = Barve.RUMENA
+            else:
+                barva = Barve.NORMALNA
+            pobarvana_crka = barva + crka.znak + Barve.NORMALNA
+            rez_z_barvo.append(pobarvana_crka)
+        return ' '.join(rez_z_barvo)
 
 
-    # kle probem nardit sharnjevanje stanja ampak nevem kaj se dogaja
+##############################
 
-    def v_slovar(self):
-        return {
-            'id_igre': 'id_igre', # dodaj nekam id_igre
-            'geslo': self.geslo,
-        }
+    def stanje(self, beseda):
+        beseda = beseda.upper()
+        if beseda == self.geslo:
+            return ZMAGA
+        else:
+            return PORAZ
     
-
-    @staticmethod
-    def iz_slovarja(slovar):
-        pass
-
-'''
-{
-    {
-        'id_igre' = 1
-        'geslo' = 'PETKA'
-    },
-
-    {
-        'id_igre' = 2
-        'geslo' = 'MESTO'
-    }
-}
-
-'''
-
 
 with open(DATOTEKA_Z_BESEDAMI) as f:
     seznam_besed = [vrstica.strip().upper() for vrstica in f if len(vrstica) == 6]
@@ -124,47 +131,46 @@ def nova_igra():
     return Besedle(random.choice(seznam_besed))
 
 
+'''
+
+{id_igre: ['geslo', [poskusi], stanje] 
+'''
 
 class Stanje:
     
-    pass
+    def __init__(self):
+        self.igre = {}
+        self.datoteka_s_stanjem = DATOTEKA_S_STANJEM
 
+    def prost_id_igre(self):
+        if self.igre == {}:
+            return 0
+        else:
+            return max(self.igre.keys()) + 1
 
-
-#     def __init__(self):
-#         self.igre = {}
-#         self.datoteka_s_stanjem = DATOTEKA_S_STANJEM
-
-#     def prost_id_igre(self):
-#         if self.igre == {}:
-#             return 0
-#         else:
-#             return max(self.igre.keys()) + 1
-
-#     def nova_igra(self):
-#         self.nalozi_igre_iz_datoteke()
-#         id_igre = self.prost_id_igre()
-#         igra = nova_igra()
-#         self.igre[id_igre] = (igra, ZACETEK)
-#         self.zapisi_igre_v_datoteko()
-#         return id_igre
+    def nova_igra(self):
+        # self.nalozi_igre_iz_datoteke()
+        id_igre = self.prost_id_igre()
+        igra = nova_igra()   
+        self.igre[id_igre] = (igra, ZACETEK) 
+        # self.zapisi_igre_v_datoteko()
+        return id_igre
         
-#     def ugibaj(self, id_igre, crka):
-#         self.nalozi_igre_iz_datoteke()
-#         igra, _ = self.igre[id_igre]
-#         stanje = igra.ugibaj(crka)
-#         self.igre[id_igre] = (igra, stanje)
-#         self.zapisi_igre_v_datoteko()
+    def ugibaj(self, id_igre, beseda):
+        # self.nalozi_igre_iz_datoteke()
+        igra, _ = self.igre[id_igre]
+        stanje = igra.stanje(beseda)
+        self.igre[id_igre] = (igra, stanje)
+        # self.zapisi_igre_v_datoteko()
 
+    # def zapisi_igre_v_datoteko(self):
+    #     with open(self.datoteka_s_stanjem, "w", encoding="utf-8") as f:
+    #         igre = {id_igre: (igra.geslo, igra.poskusi, stanje)
+    #             for id_igre, (igra, stanje) in self.igre.items()}
+    #         json.dump(igre, f)
 
-#     def zapisi_igre_v_datoteko(self):
-#         with open(self.datoteka_s_stanjem, "w", encoding="utf-8") as f:
-#             igre = {id_igre: (Besedle.geslo, stanje)
-#                 for id_igre, (igra, stanje) in self.igre.items()}
-#             json.dump(igre, f)
-
-#     def nalozi_igre_iz_datoteke(self):
-#         with open(self.datoteka_s_stanjem, "r", encoding="utf-8") as f:
-#             igre = json.load(f)
-#             self.igre = {int(id_igre): (Besedle(geslo), stanje)
-#                 for id_igre, (geslo, stanje) in igre.items()}
+    # def nalozi_igre_iz_datoteke(self):
+    #     with open(self.datoteka_s_stanjem, "r", encoding="utf-8") as f:
+    #         igre = json.load(f)
+    #         self.igre = {int(id_igre): (Besedle(geslo), stanje)
+    #             for id_igre, (geslo, stanje) in igre.items()}

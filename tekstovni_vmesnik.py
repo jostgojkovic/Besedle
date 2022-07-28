@@ -59,6 +59,18 @@ def izpisi_rezultat(besedle):
     for _ in range(besedle.preostali_poskusi()):
         print(' '.join(['_'] * besedle.DOLZINA_BESEDE))
 
+# def izpisi_rezultat(besedle):
+#     # print(f'Imaš še toliko poskusov: {besedle.preostali_poskusi()}')
+#     # print('\nTvoji Ugibi: \n')
+#     for beseda in besedle.poskusi:
+#         rezultat = besedle.ugibaj(beseda)
+#         pobarvan_rez = dodaj_barve(rezultat)
+#         pobarvan_rez
+    
+#     for _ in range(besedle.preostali_poskusi()):
+#         ' '.join(['_'] * besedle.DOLZINA_BESEDE)
+
+
 
 def dodaj_barve(rez: List[Stanje_crk]):
     rez_z_barvo = []
