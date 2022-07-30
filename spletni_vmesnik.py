@@ -15,12 +15,14 @@ def nova_igra():
 @bottle.get('/igra/<id_igre:int>/')
 def pokazi_igro(id_igre):
     igra = model.nova_igra()
+    print("-----NOVA----IGRA--------")
     return bottle.template('igra.tpl', igra=igra, id_igre=id_igre)
 
 @bottle.post('/igra/<id_igre:int>/')
 def ugibaj(id_igre):
     beseda = bottle.request.forms.getunicode('beseda')
-    besedle.ugibaj(id_igre, beseda)
+    # besedle.preveri_pravilno_dolzino_besede(beseda)
+    besedle.ugibaj(beseda)
     bottle.redirect('/igra/{}/'.format(id_igre))
 
 @bottle.get('/img/<picture>')

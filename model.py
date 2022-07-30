@@ -21,7 +21,7 @@ class Barve:
     NORMALNA = '\033[0m'
 
 
-class Stanje_crk:
+class StanjeCrk:
 
     def __init__(self, znak):
         self.znak = znak
@@ -33,10 +33,8 @@ class Besedle:
 
     MAX_STEVILO_POSKUSOV = 6
     DOLZINA_BESEDE = 5
-
     
     def __init__(self, geslo):
-        self.igre = {}
         self.geslo = geslo.upper()
         self.poskusi = []
 
@@ -46,7 +44,7 @@ class Besedle:
 
     def ugibaj(self, beseda):
         beseda = beseda.upper()
-        rezultat = [Stanje_crk(znak) for znak in beseda]
+        rezultat = [StanjeCrk(znak) for znak in beseda]
 
         pomozna_skrivnost = list(self.geslo)
 
@@ -89,20 +87,8 @@ class Besedle:
         else:
             return 'Imaš že vse črke!'
 
-    def prost_id_igre(self):
-        if self.igre == {}:
-            return 0
-        else:
-            return max(self.igre.keys()) + 1
-
-    def v_slovar(self):
-        id_igre = self.prost_id_igre()
-        return {
-            id_igre: (self.geslo, self.poskusi)
-        }
-
     @staticmethod
-    def iz_slovarja(self):
+    def iz_slovarja(slovar):
         pass
 
     def shrani_v_datoteko(self, datoteka=DATOTEKA_S_STANJEM):
@@ -114,25 +100,43 @@ class Besedle:
     def preberi_iz_datoteke(datoteka):
         pass
 
-with open(DATOTEKA_Z_BESEDAMI) as f:
-    seznam_besed = [vrstica.strip().upper() for vrstica in f if len(vrstica) == 6]
+    @staticmethod
+    def preveri_pravilno_dolzino_besede(beseda):
+        if len(beseda) != 5:
+            raise ValueError("Beseda mora biti dolžine 5!")
+
+def dobi_seznam_besed():
+    with open(DATOTEKA_Z_BESEDAMI) as f:
+        seznam_besed = [vrstica.strip().upper() for vrstica in f if len(vrstica) == 6]
+    return seznam_besed
+
+SEZNAM_BESED = dobi_seznam_besed()
 
 def nova_igra():
-    return Besedle(random.choice(seznam_besed))
+    return Besedle(random.choice(SEZNAM_BESED))
 
 
 
-# class Stanje:
+class Stanje:
     
-#     def __init__(self):
-#         self.igre = {}
-#         self.datoteka_s_stanjem = DATOTEKA_S_STANJEM
+    def __init__(self):
+        self.igre = {}
+        self.datoteka_s_stanjem = DATOTEKA_S_STANJEM
 
-#     def prost_id_igre(self):
-#         if self.igre == {}:
-#             return 0
-#         else:
-#             return max(self.igre.keys()) + 1
+    def prost_id_igre(self):
+        if self.igre == {}:
+            return 0
+        else:
+            return max(self.igre.keys()) + 1
+
+    def ugibaj(self, id_igre, beseda):
+        # self.nalozi_igre_iz_datoteke()
+        igra, _ = self.igre[id_igre]
+        stanje = igra.stanje(beseda)
+        self.igre[id_igre] = (igra, stanje)
+        self.zapisi_igre_v_datoteko()
+
+
 
 #     def nova_igra(self):
 #         # self.nalozi_igre_iz_datoteke()
@@ -141,13 +145,7 @@ def nova_igra():
 #         self.igre[id_igre] = (igra, ZACETEK) 
 #         # self.zapisi_igre_v_datoteko()
 #         return id_igre
-        
-#     def ugibaj(self, id_igre, beseda):
-#         # self.nalozi_igre_iz_datoteke()
-#         igra, _ = self.igre[id_igre]
-#         stanje = igra.stanje(beseda)
-#         self.igre[id_igre] = (igra, stanje)
-#         # self.zapisi_igre_v_datoteko()
+
 
 #     def zapisi_igre_v_datoteko(self):
 #         with open(self.datoteka_s_stanjem, "w", encoding="utf-8") as f:

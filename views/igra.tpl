@@ -8,7 +8,7 @@
 
   <h1>Besedle</h1>
 
-  <h4> Preostali poskusi: {{igra.izpisi_rezultat()}} </h4>
+  <h4> Preostali poskusi: vcasih je bilo tukaj igra.izpisi_rezultat() </h4>
 
   <form action="/igra/" method="post">
     <button type="submit">Nova igra</button>
@@ -18,6 +18,8 @@
     Beseda: <input type='text' name='beseda'/>
     <button type='submit'>Ugibaj</button>
   </form>
+
+
 
 
 </body>
