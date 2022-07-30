@@ -1,7 +1,7 @@
 import model
 import bottle
 
-besedle = model.Stanje()
+besedle = model.nova_igra()
 
 @bottle.get('/')
 def index():
@@ -9,12 +9,12 @@ def index():
 
 @bottle.post('/igra/')
 def nova_igra():
-    id_igre = besedle.nova_igra()
+    id_igre = besedle.prost_id_igre()
     bottle.redirect('/igra/{}/'.format(id_igre))
 
 @bottle.get('/igra/<id_igre:int>/')
 def pokazi_igro(id_igre):
-    igra, _ = besedle.igre[id_igre]
+    igra = model.nova_igra()
     return bottle.template('igra.tpl', igra=igra, id_igre=id_igre)
 
 @bottle.post('/igra/<id_igre:int>/')
